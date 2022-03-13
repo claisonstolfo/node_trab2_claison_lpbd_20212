@@ -20,9 +20,8 @@ const config = {
     port: 5432
 };
 
-//define a conexao com o banco de dados.
+//definia conexao com o banco de dados.
 const postgres = new pg.Pool(config);
-
 
 //definicao do primeiro serviço web.
 sw.get('/', (req, res) => {
