@@ -18,10 +18,11 @@
              <div class="col-xs-3">
                <ul class="nav nav-pills nav-stacked">
                  <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
-                 <li><a data-toggle="pill" href="#menu1">Munição</a></li>
-                 <li><a data-toggle="pill" href="#menu2">Tipos de Munição</a></li>
+                 <li><a data-toggle="pill" href="#menu1">Tipos de Munição</a></li>
+                 <li><a data-toggle="pill" href="#menu2">Munição</a></li>                 
                </ul>
              </div>
+
              <div class="col-xs-9">
                <div class="tab-content" id="app">
                  <div id="home" class="tab-pane fade in active">
@@ -30,7 +31,54 @@
                  </div>
 
                  <div id="menu1" class="tab-pane fade">
-                  
+
+                    <h2>Listagem de Tipos de Munição</h2>   
+
+                    <table class="table table-striped" >
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Data de Criação</th>                          
+                            <th scope="col">Alterar</th>
+                            <th scope="col">Remover</th>
+                        </tr>                     
+                        <tbody>
+                            <tr v-for="(t, indice) in tiposmunicao">                                                                                 
+                                    <td>{{t.codigo}}</td>
+                                    <td>{{t.nome}}</td>
+                                    <td>{{t.datacriacao}}</td>
+                                    <td><button v-on:click="editTipomunicao(indice)" class="btn" type="button">Alterar</button></td>
+                                    <td><button v-on:click="remTipomunicao(indice)" class="btn" type="button">Remover</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <form id="formulario">                        
+                      <h3>Formulário para cadastrar Tipo de Munição</h3>
+                          <div class="form-group">
+                              <label for="inputCodigo">#:</label>
+                              <input type="text" v-model="novo_tipomunicao.codigo" class="form-control" id="inputCodigo" disabled>
+                          </div>
+
+                          <div class="form-group">
+                              <label for="inputNome">Nome:</label>
+                              <input type="text" v-model="novo_tipomunicao.nome" class="form-control" id="inputNome">
+                          </div>
+                        
+                          <div class="form-group">
+                            <label for="inputDtCriacao">Data de Criação:</label>
+                            <input type="date" v-model="novo_tipomunicao.datacriacao" class="form-control" id="inputDtCriacao" disabled>
+                          </div> 
+                          
+                          <button @click="addTipomunicao" class="btn btn-primary" type="button">Salvar</button>
+                          <button @click="cleanFormularioTipomunicao" class="btn btn-primary" type="button">Limpar</button>
+                        </div>                                                                            
+                    </form>
+
+                 </div>
+                 
+                 <div id="menu2" class="tab-pane fade">
+                
                     <h2>Listagem de Munições</h2>   
 
                     <table class="table table-striped" >
@@ -56,92 +104,45 @@
                         </tbody>
                     </table>
 
-                    
                     <form id="formulario">     
                         <h3>Formulário para cadastrar Munição</h3>                   
-                        <div>
-                          <div class="form-group">
-                            <label for="inputCodArtefato">Cod.Artefato:</label>
-                            <input type="text" v-model="nova_municao.codartefato" class="form-control" id="inputCodArtefato" disabled>
-                          </div>
+                            <div class="form-group">
+                                <label for="inputCodArtefato">Cod.Artefato:</label>
+                                <input type="text" v-model="nova_municao.codartefato" class="form-control" id="inputCodArtefato" disabled>
+                            </div>
 
-                          <div class="form-group">
-                            <label for="inputCodTipomunicao">Cod.TipoMunição:</label>
-                            <input type="text" v-model="nova_municao.cod_tipomunicao" class="form-control" id="inputCodTipomunicao" disabled>
-                          </div>
+                            <div class="form-group">
+                                <label for="inputCodTipomunicao">Cod.TipoMunição:</label>
+                                <input type="text" v-model="nova_municao.cod_tipomunicao" class="form-control" id="inputCodTipomunicao" disabled>
+                            </div>
 
-                          <div class="form-group">
-                              <label for="inputQuantmaxcompra">Quantidade Maxima para Compra:</label>
-                              <input type="number" v-model="nova_municao.quant_max_compra" class="form-control" id="inputQuantmaxcompra">
-                          </div>
+                            <div class="form-group">
+                                <label for="inputQuantmaxcompra">Quantidade Maxima para Compra:</label>
+                                <input type="number" v-model="nova_municao.quant_max_compra" class="form-control" id="inputQuantmaxcompra">
+                            </div>
 
-                          <div class="form-group">
-                            <label for="inputCalibre">Calibre:</label>
-                            <input type="number" v-model="nova_municao.calibre" class="form-control" id="inputCalibre">
-                        </div>
+                            <div class="form-group">
+                                <label for="inputCalibre">Calibre:</label>
+                                <input type="number" v-model="nova_municao.calibre" class="form-control" id="inputCalibre">
+                            </div>
 
-                          <div class="form-group">
-                            <label for="selectTipomunicao"><a href="#menu2">Tipo de Munição:</a></label>
-                            <select v-model="nova_municao.tipomunicao" class="form-control" id="selectTipomunicao">
-                                <option disabled value="">Escolha um item</option>
-                                <option v-for="e in tiposmunicao" v-bind:value="e">
-                                    {{ e.nome}}
-                                </option>
-                            </select>
-                          </div>    
+                            <div class="form-group">
+                                <label for="selectTipomunicao"><a href="#menu2">Tipo de Munição:</a></label>
+                                <select v-model="nova_municao.tipomunicao" class="form-control" id="selectTipomunicao">
+                                    <option disabled value="">Escolha um item</option>
+                                    <option v-for="e in tiposmunicao" v-bind:value="e">
+                                        {{ e.nome}}
+                                    </option>
+                                </select>
+                            </div>    
                             
-                          <button @click="addMunicao" class="btn btn-primary" type="button">Salvar</button>
-                          <button @click="cleanFormularioMunicao" class="btn btn-primary" type="button">Limpar</button>                         
-                        </div>                                                                            
-                    </form> 
+                            <button @click="addMunicao" class="btn btn-primary" type="button">Salvar</button>
+                            <button @click="cleanFormularioMunicao" class="btn btn-primary" type="button">Limpar</button>                         
+                                                                                                    
+                    </form>              
 
-                 </div>
-                 <div id="menu2" class="tab-pane fade">
+                </div>
 
-                    <h2>Listagem de Tipos de Munição</h2>   
-
-                    <table class="table table-striped" >
-                        <tr>
-                            <th scope="col">Código</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Data de Criação</th>                          
-                            <th scope="col">Alterar</th>
-                            <th scope="col">Remover</th>
-                        </tr>                     
-                        <tbody>
-                            <tr v-for="(t, indice) in tiposmunicao">                                                                                 
-                                    <td>{{t.codigo}}</td>
-                                    <td>{{t.nome}}</td>
-                                    <td>{{t.datacriacao}}</td>
-                                    <td><button v-on:click="editTipomunicao(indice)" class="btn" type="button">Alterar</button></td>
-                                    <td><button v-on:click="remTipomunicao(indice)" class="btn" type="button">Remover</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <form id="formulario">                        
-                      <h3>Formulário para cadastrar Tipos de Munição</h3>
-                          <div class="form-group">
-                              <label for="inputCodigo">#:</label>
-                              <input type="text" v-model="novo_tipomunicao.codigo" class="form-control" id="inputCodigo" disabled>
-                          </div>
-
-                          <div class="form-group">
-                              <label for="inputNome">Nome:</label>
-                              <input type="text" v-model="novo_tipomunicao.nome" class="form-control" id="inputNome">
-                          </div>
-                        
-                        <div class="form-group">
-                            <label for="inputDtCriacao">Data de Criação:</label>
-                            <input type="date" v-model="novo_tipomunicao.datacriacao" class="form-control" id="inputDtCriacao" disabled>
-                        </div> 
-                          
-                          <button @click="addTipomunicao" class="btn btn-primary" type="button">Salvar</button>
-                          <button @click="cleanFormularioTipomunicao" class="btn btn-primary" type="button">Limpar</button>
-                                                                                                      
-                    </form>  
-
-                  </div>
                </div>
              </div>
            </div>
@@ -160,11 +161,11 @@
                   "nova_municao" : {indice: '',
                                     codartefato: '',
                                     cod_tipomunicao: '',
-                                    quant_max_compra: '',
+                                    quant_max_compra: 0,
                                     calibre: '',
                                     tipomunicao: {codigo: 0, nome: '', datacriacao: ''}},
                   "tiposmunicao": tiposmunicao,
-                  "novo_tipomunicao" : {//indice: '',
+                  "novo_tipomunicao" : {indice: '',
                                         codigo: '',
                                         nome: '',
                                         datacriacao: ''}};
@@ -185,7 +186,7 @@
       new Vue({ 
                 el: '#app', 
                 data: dados,
-                methods: {              
+                methods: {             
 
                     
                     addTipomunicao: function () {
@@ -223,7 +224,7 @@
 									})
 								.catch(error => { 
                                     console.log(error)
-									alert('Erro ao alterar jogador: '+error);
+									alert('Erro ao alterar o tipo de municao: '+error);
 								});	
 
                             }
@@ -236,6 +237,44 @@
                         }
                     },
 
+                    editTipomunicao: function (param_index) {
+
+                        this.novo_tipomunicao.indice = param_index;
+                        this.novo_tipomunicao.codigo = this.tiposmunicao[param_index].codigo; 
+                        this.novo_tipomunicao.nome = this.tiposmunicao[param_index].nome;
+                        this.novo_tipomunicao.datacriacao = this.tiposmunicao[param_index].datacriacao;
+                    },
+
+                    
+                    remTipomunicao: function(param_index){
+
+                        //documentacao sobre o splice
+                        //https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+                        //remove 1 elemento do índice definido pela variavel param_index
+                        var r = confirm("Deseja realmente remover?");
+                        if(r){                            
+                            
+                            this.$http.get('http://localhost:4000/deletetipomunicao/' + this.tiposmunicao[param_index].codigo)
+
+                                .then(response => {
+
+                                    //documentacao sobre o splice
+                                    //https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+                                    //remove 1 elemento do índice definido pela variavel param_index
+                                    this.tiposmunicao.splice(param_index, 1);
+
+                                    alert('Removeu com sucesso o tipo de munição ' + response.data.codigo);
+
+                                    })
+                                .catch(error => {
+                                        // error callback                                        
+                                        alert('Erro ao remover: ' + error);
+                                        console.log(error);
+                                });	
+
+                        }
+
+                    },
 
                     cleanFormularioTipomunicao: function() {
 
@@ -244,50 +283,16 @@
                         this.novo_tipomunicao.nome = '';
                         this.novo_tipomunicao.datacriacao = '';
                     },
-                    
-
-                    editTipomunicao: function (param_index) {
-
-                        this.novo_tipomunicao.indice = param_index;
-                        this.novo_tipomunicao.codigo = this.tiposmunicao[param_index].codigo; 
-                        this.novo_tipomunicao.nome = this.tiposmunicao[param_index].nome;
-                        this.novo_tipo.datacriacao = this.tiposmunicao[param_index].datacriacao;
-                    },
-
-
-                    created: function(){
-                    
-                    this.$http.get('http://localhost:4000/listtipomunicao')
-                                        
-                        .then(response => {
-
-                            for(let j of response.data){
-
-                                this.tiposmunicao.push({codigo: j.codigo,
-                                                        nome: j.nome,
-                                                        datacriacao: j.datacriacao                                     
-                                                    },
-                                                );
-
-                            }
-                        
-                        }).catch(response => {
-                            
-                            alert('Não conectou no serviço: listtipomunicao');
-                            console.log(response);
-                        });
-                        
-                    },
-
+                
                     
                     addMunicao: function () {
                         
                         var municao = jQuery.extend({}, this.nova_municao);//clona o this.nova_municao e armazena na variavel municao. dessa forma alteracoes em this.nova_municao nao irao refletir em municao.
-                        var nome = jQuery.extend({}, this.novo_jogador.endereco);//clona o this.novo_jogador.endereco
+                        var nome = jQuery.extend({}, this.nova_municao.tipomunicao);//clona o this.nova_municao.nome
                         municao.tipomunicao = nome;
 
 
-                        if (municao.quant_max_compra > 0 && municao.calibre > 0 && municao.tipomunicao.nome.length > 0) {
+                        if (municao.codartefato > 0 && municao.quant_max_compra > 0 && municao.calibre > 0 && municao.tipomunicao.nome.length > 0) {
                             
                             //documentação sobre o parseInt
                             //https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/parseInt
@@ -331,20 +336,6 @@
                         }
                     },
 
-
-                    cleanFormularioMunicao: function() {
-
-                        this.nova_municao.indice = '';
-                        this.nova_municao.codartefato = ''; 
-                        this.nova_municao.cod_tipomunicao = '';
-                        this.nova_municao.quant_max_compra = 0;
-                        this.nova_municao.calibre = '';
-                        this.nova_municao.tipomunicao.codigo = 0;
-                        this.nova_municao.tipomunicao.nome = '';
-                        this.nova_municao.tipomunicao.datacriacao = '';
-                    },
-                    
-
                     editMunicao: function (param_index) {
 
                         this.nova_municao.indice = param_index;
@@ -353,14 +344,105 @@
                         this.nova_municao.quant_max_compra = this.municoes[param_index].quant_max_compra;
                         this.nova_municao.calibre = this.municoes[param_index].calibre;
                         this.nova_municao.tipomunicao = this.municoes[param_index].tipomunicao;
+                    
+                    },
+
+                    remMunicao: function(param_index){
+
+                        //documentacao sobre o splice
+                        //https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+                        //remove 1 elemento do índice definido pela variavel param_index
+                        var r = confirm("Deseja realmente remover?");
+                        if(r){                            
+                            
+                            this.$http.get('http://localhost:4000/deletemunicao/' + this.municoes[param_index].codartefato)
+
+                                .then(response => {
+
+                                    //documentacao sobre o splice
+                                    //https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+                                    //remove 1 elemento do índice definido pela variavel param_index
+                                    this.municoes.splice(param_index, 1);
+
+                                    alert('Removeu com sucesso a municao ' + response.data.codartefato);
+
+                                    })
+                                .catch(error => {
+                                        // error callback                                        
+                                        alert('Erro ao remover: ' + error);
+                                        console.log(error);
+                                });	
+
+                        }
+
+                    },
+
+                    cleanFormularioMunicao: function() {
+
+                        this.nova_municao.indice = '';
+                        this.nova_municao.codartefato = ''; 
+                        this.nova_municao.cod_tipomunicao = '';
+                        this.nova_municao.quant_max_compra = 0;
+                        this.nova_municao.calibre = '';
+                        this.nova_municao.tipomunicao.codigo = '';
+                        this.nova_municao.tipomunicao.nome = '';
+                        this.nova_municao.tipomunicao.datacriacao = '';
                     }
 
+                },
 
+                
+                created: function(){
+                
+                    this.$http.get('http://localhost:4000/listtipomunicao')
+                                        
+                        .then(response => {
 
+                            for(let t of response.data){
 
+                                this.tiposmunicao.push({codigo: t.codigo,
+                                                        nome: t.nome,
+                                                        datacriacao: t.datacriacao                                     
+                                                    },
+                                                );
 
+                            }
+                        
+                        }).catch(response => {
+                            
+                            alert('Não conectou no serviço: listtipomunicao');
+                            console.log(response);
+                        });
 
+/*
+                    this.$http.get('http://localhost:4000/listmunicao')
+                                    
+                        .then(response => {
+
+                            for(let m of response.data){
+
+                                this.tiposmunicao.push({codartefato: m.codartefato,
+                                                        cod_tipomunicao: m.cod_tipomunicao,
+                                                        quant_max_compra: m.quant_max_compra,
+                                                        calibre: m.calibre,
+                                                        tipomunica:{codigo: m.codigo, 
+                                                                    nome: m.nome, 
+                                                                    datacriacao: m.datacriacao},                             
+                                                    }
+                                                );
+
+                            }
+                        
+                        }).catch(response => {
+                            
+                            alert('Não conectou no serviço: listmunicao');
+                            console.log(response);
+                        });
+*/
+                    
                 }
+
+
           });
     });
 
