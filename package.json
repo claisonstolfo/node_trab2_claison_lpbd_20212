@@ -22,8 +22,9 @@
     "url": "https://github.com/claisonstolfo/node_trab2_claison_lpbd_20212/issues"
   },
   "homepage": "https://github.com/claisonstolfo/node_trab2_claison_lpbd_20212#readme",
-  "devDependencies": {
-    "webpack-dev-middleware": "^5.3.1",
-    "webpack-hot-middleware": "^2.25.1"
+  "dependencies": {
+    "express": "^4.17.3",
+    "expresss": "^0.0.0",
+    "pg": "^8.7.3"
   }
 }

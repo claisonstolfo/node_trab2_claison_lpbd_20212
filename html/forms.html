@@ -49,18 +49,19 @@
                                     <td>{{m.cod_tipomunicao}}</td>
                                     <td>{{m.quant_max_compra}}</td>
                                     <td>{{m.calibre}}</td>
-                                    <td>{{m.tiposmunicao.nome}}</td>
+                                    <td>{{m.tipomunicao.nome}}</td>
                                     <td><button v-on:click="editMunicao(indice)" class="btn" type="button">Alterar</button></td>
                                     <td><button v-on:click="remMunicao(indice)" class="btn" type="button">Remover</button></td>
                             </tr>
                         </tbody>
                     </table>
-  
+
+                    
                     <form id="formulario">     
                         <h3>Formulário para cadastrar Munição</h3>                   
                         <div>
                           <div class="form-group">
-                            <label for="inputCodArtefato">Cod.Munição:</label>
+                            <label for="inputCodArtefato">Cod.Artefato:</label>
                             <input type="text" v-model="nova_municao.codartefato" class="form-control" id="inputCodArtefato" disabled>
                           </div>
 
@@ -108,16 +109,16 @@
                             <th scope="col">Remover</th>
                         </tr>                     
                         <tbody>
-                            <tr v-for="(t, indice) in tiposmunicao">                                                
-                                    <td>{{indice}}</td>
+                            <tr v-for="(t, indice) in tiposmunicao">                                                                                 
                                     <td>{{t.codigo}}</td>
                                     <td>{{t.nome}}</td>
                                     <td>{{t.datacriacao}}</td>
-                                    <td><button v-on:click="editTipoMunicao(indice)" class="btn" type="button">Alterar</button></td>
-                                    <td><button v-on:click="remTipoMunicao(indice)" class="btn" type="button">Remover</button></td>
+                                    <td><button v-on:click="editTipomunicao(indice)" class="btn" type="button">Alterar</button></td>
+                                    <td><button v-on:click="remTipomunicao(indice)" class="btn" type="button">Remover</button></td>
                             </tr>
                         </tbody>
                     </table>
+
                     <form id="formulario">                        
                       <h3>Formulário para cadastrar Tipos de Munição</h3>
                           <div class="form-group">
@@ -135,8 +136,8 @@
                             <input type="date" v-model="novo_tipomunicao.datacriacao" class="form-control" id="inputDtCriacao" disabled>
                         </div> 
                           
-                          <button @click="addTipoMunicao" class="btn btn-primary" type="button">Salvar</button>
-                          <button @click="cleanTipoMunicao" class="btn btn-primary" type="button">Limpar</button>
+                          <button @click="addTipomunicao" class="btn btn-primary" type="button">Salvar</button>
+                          <button @click="cleanFormularioTipomunicao" class="btn btn-primary" type="button">Limpar</button>
                                                                                                       
                     </form>  
 
@@ -163,8 +164,10 @@
                                     calibre: '',
                                     tipomunicao: {codigo: 0, nome: '', datacriacao: ''}},
                   "tiposmunicao": tiposmunicao,
-                  "novo_tipomunicao" : {codigo: '', nome: '', datacriacao: ''}};
-
+                  "novo_tipomunicao" : {//indice: '',
+                                        codigo: '',
+                                        nome: '',
+                                        datacriacao: ''}};
       
 
       Vue.filter('formataData', function (value) {                
@@ -182,16 +185,109 @@
       new Vue({ 
                 el: '#app', 
                 data: dados,
-                methods: {
+                methods: {              
 
+                    
+                    addTipomunicao: function () {
+                        
+                        var tipomunicao = jQuery.extend({}, this.novo_tipomunicao);//clona o this.novo_tipomunicao e armazena na variavel tipomunicao. dessa forma alteracoes em this.novo_tipomunicao nao irao refletir em tipomunicao.
+
+                        if (tipomunicao.nome.trim().length > 0){
+                            
+                            //documentação sobre o parseInt
+                            //https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+                            if(isNaN(parseInt(tipomunicao.indice))){
+
+                                                         
+                                this.$http.post('http://localhost:4000/inserttipomunicao', tipomunicao
+                                   )
+								.then(response => { 	
+										
+										this.tiposmunicao.push(response.data);										
+                                        alert('Inseriu o tipo de municao '+response.data.nome);
+									})
+								.catch(error => { 
+                                    console.log(error)
+									alert('Erro ao inserir o tipo de municao: '+error.response.data);
+								});	
+
+                            }else{
+
+                                this.$http.post('http://localhost:4000/updatetipomunicao', tipomunicao
+                                   )
+								.then(response => { 											                                        
+                                                                             
+                                        Vue.set(this.tiposmunicao, tipomunicao.indice, response.data);//altera um elemento do vetor this.tiposmunicao
+
+                                        alert('Alterou o tipo de municao '+response.data.nome);
+									})
+								.catch(error => { 
+                                    console.log(error)
+									alert('Erro ao alterar jogador: '+error);
+								});	
+
+                            }
+
+                            this.cleanFormularioTipomunicao();
+
+                        }else{
+
+                            alert("Preencha o formulário corretamente!!!");
+                        }
+                    },
+
+
+                    cleanFormularioTipomunicao: function() {
+
+                        this.novo_tipomunicao.indice = '';
+                        this.novo_tipomunicao.codigo = ''; 
+                        this.novo_tipomunicao.nome = '';
+                        this.novo_tipomunicao.datacriacao = '';
+                    },
+                    
+
+                    editTipomunicao: function (param_index) {
+
+                        this.novo_tipomunicao.indice = param_index;
+                        this.novo_tipomunicao.codigo = this.tiposmunicao[param_index].codigo; 
+                        this.novo_tipomunicao.nome = this.tiposmunicao[param_index].nome;
+                        this.novo_tipo.datacriacao = this.tiposmunicao[param_index].datacriacao;
+                    },
+
+
+                    created: function(){
+                    
+                    this.$http.get('http://localhost:4000/listtipomunicao')
+                                        
+                        .then(response => {
+
+                            for(let j of response.data){
+
+                                this.tiposmunicao.push({codigo: j.codigo,
+                                                        nome: j.nome,
+                                                        datacriacao: j.datacriacao                                     
+                                                    },
+                                                );
+
+                            }
+                        
+                        }).catch(response => {
+                            
+                            alert('Não conectou no serviço: listtipomunicao');
+                            console.log(response);
+                        });
+                        
+                    },
+
+                    
                     addMunicao: function () {
                         
                         var municao = jQuery.extend({}, this.nova_municao);//clona o this.nova_municao e armazena na variavel municao. dessa forma alteracoes em this.nova_municao nao irao refletir em municao.
-                        var tipomunicao = jQuery.extend({}, this.nova_municao.tipomunicao);//clona o this.nova_municao.nome
-                        municao.tipomunicao = tipomunicao;
+                        var nome = jQuery.extend({}, this.novo_jogador.endereco);//clona o this.novo_jogador.endereco
+                        municao.tipomunicao = nome;
 
 
-                        if (municao.calibre > 0 && municao.quant_max_compra > 0 && municao.tipomunicao.nome !="") {
+                        if (municao.quant_max_compra > 0 && municao.calibre > 0 && municao.tipomunicao.nome.length > 0) {
                             
                             //documentação sobre o parseInt
                             //https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/parseInt
@@ -203,26 +299,26 @@
 								.then(response => { 	
 										
 										this.municoes.push(response.data);										
-                                        alert('Inseriu a Munição '+response.data.codartefato);
+                                        alert('Inseriu a municao '+response.data.codartefato);
 									})
 								.catch(error => { 
                                     console.log(error)
-									alert('Erro ao inserir a munição: '+error.response.data);
+									alert('Erro ao inserir a municao: '+error.response.codartefato);
 								});	
 
                             }else{
 
                                 this.$http.post('http://localhost:4000/updatemunicao', municao
                                    )
-								.then(response => {
-
+								.then(response => { 											                                        
+                                                                                
                                         Vue.set(this.municoes, municao.indice, response.data);//altera um elemento do vetor this.municoes
 
-                                        alert('Alterou a Munição '+response.data.codartefato);
+                                        alert('Alterou a municao '+response.data.codartefato);
 									})
 								.catch(error => { 
                                     console.log(error)
-									alert('Erro ao alterar a Munição: '+error);
+									alert('Erro ao alterar a municao: '+error);
 								});	
 
                             }
@@ -236,84 +332,36 @@
                     },
 
 
+                    cleanFormularioMunicao: function() {
+
+                        this.nova_municao.indice = '';
+                        this.nova_municao.codartefato = ''; 
+                        this.nova_municao.cod_tipomunicao = '';
+                        this.nova_municao.quant_max_compra = 0;
+                        this.nova_municao.calibre = '';
+                        this.nova_municao.tipomunicao.codigo = 0;
+                        this.nova_municao.tipomunicao.nome = '';
+                        this.nova_municao.tipomunicao.datacriacao = '';
+                    },
+                    
+
                     editMunicao: function (param_index) {
-                        this.nova_municao.indice = param_index
+
+                        this.nova_municao.indice = param_index;
                         this.nova_municao.codartefato = this.municoes[param_index].codartefato;
                         this.nova_municao.cod_tipomunicao = this.municoes[param_index].cod_tipomunicao;
                         this.nova_municao.quant_max_compra = this.municoes[param_index].quant_max_compra;
                         this.nova_municao.calibre = this.municoes[param_index].calibre;
-                        this.nova_municao.tipomunicao = this.municoes[param_index].tipomunicao;                      
-                    },
-
-
-                    
-
-                    remMunicao: function(param_index){
-
-                        //documentacao sobre o splice
-                        //https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
-                        //remove 1 elemento do índice definido pela variavel param_index
-
-                        var r = confirm('Deseja realmente remover este Item? ');
-                        if (r) { 
-
-                            this.$http.get('http://localhost:4000/deletemunicao/' + this.municoes[param_index].codartefato)
-                                .then(response => {
-
-                                    this.municoes.splice(param_index, 1);
-
-                                    alert('Removeu com sucesso a municao ' + response.data.codartefato);
-                                    })
-
-                                .catch(error => {                                     
-                                    alert('Erro ao remover: ' + error);
-                                    console.log(error);
-                            });
-                        }                            
-
-                    },
-                    
-                    cleanFormularioMunicao: function() {
-
-                        this.nova_municao.codartefato = '';
-                        this.nova_municao.cod_tipomunicao = ''; 
-                        this.nova_municao.quant_max_compra = '';
-                        this.nova_municao.calibre = '';
-                        this.nova_municao.tipomunicao = '';
+                        this.nova_municao.tipomunicao = this.municoes[param_index].tipomunicao;
                     }
-                },
 
-                created: function(){
-                
-                this.$http.get('http://localhost:4000/listmunicao')
-                                    
-                    .then(response => {
 
-                        for(let j of response.data){
 
-                            this.municoes.push({codartefato: j.codartefato,
-                                                cod_tipomunicao:j.tipomunicao,
-                                                quant_max_compra:j.quant_max_compra,
-                                                calibre:j.calibre,
-                                                tipomunicao:{codigo: j.codigo,
-                                                             nome: j.nome,
-                                                             datacriacao: j.datacriacao},                                                  
-                                                }
-                                            );
 
-                        }
-                    
-                    }).catch(response => {
-                        
-                        alert('Não conectou no serviço: listmunicao');
-                        console.log(response);
-                    });
-                    
+
+
                 }
-                
-          
-          }); 
-
+          });
     });
 
 

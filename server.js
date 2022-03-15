@@ -29,9 +29,42 @@ sw.get('/', (req, res) => {
 })
 
 
-sw.get('/listmunicao', function (req, res) {
+sw.post('/inserttipomunicao', function (req, res, next) {
+    
+    postgres.connect(function(err,client,done) {
 
-    //estabelece uma conexão com o banco de dados
+       if(err){
+
+           console.log("Nao conseguiu acessar o  BD "+ err);
+           res.status(400).send('{'+err+'}');
+       }else{            
+
+            var q ={//insert into tb_tipomunicao (nome, datacriacao) values ('claison', now());
+                text: 'insert into tb_tipomunicao (nome, datacriacao) values ($1, now()) returning codigo, nome, to_char(datacriacao, \'dd/mm/yyyy\') as datacriacao',
+                values: [req.body.nome]
+            }
+            console.log(q);
+    
+            client.query(q,function(err,result) {
+                done(); // closing the connection;
+                if(err){
+                    console.log('retornou 400 no insert');
+                    console.log(err);
+                    console.log(err.data);
+                    res.status(400).send('{'+err+'}');
+                }else{
+
+                    console.log('retornou 201 no insert');
+                    res.status(201).send(result.rows[0]);//se não realizar o send nao finaliza o client
+                }           
+            });
+       }       
+    });
+});
+
+sw.get('/listtipomunicao', function (req, res) {
+
+    //estabelece uma conexao com o bd.
     postgres.connect(function(err,client,done) {
 
        if(err){
@@ -39,7 +72,7 @@ sw.get('/listmunicao', function (req, res) {
            console.log("Não conseguiu acessar o BD :"+ err);
            res.status(400).send('{'+err+'}');
        }else{
-        client.query('select m.codartefato, m.cod_tipomunicao, m.quant_max_compra, m.calibre, t.codigo, t.nome, to char(t.datacriacao, \'dd/mm/yyyy\') from tb_municao m left join tb_tipomunicao t on (m.cod_tipomunicao=t.codigo) order by codartefato asc;',function(err,result) {        
+        client.query('select j.codigo, j.nome, to_char(j.datacriacao, \'dd/mm/yyyy\') as datacriacao from tb_tipomunicao j order by codigo asc;',function(err,result) {        
                 done(); // closing the connection;
                 if(err){
                     console.log(err);
