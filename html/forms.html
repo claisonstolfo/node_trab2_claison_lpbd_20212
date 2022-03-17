@@ -14,21 +14,21 @@
        
         <div class="container-fluid">
             <h2>Formulários e Banco de Dados</h2>
-               <div class="row">
-             <div class="col-xs-3">
-               <ul class="nav nav-pills nav-stacked">
-                 <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
-                 <li><a data-toggle="pill" href="#menu1">Tipos de Munição</a></li>
-                 <li><a data-toggle="pill" href="#menu2">Munição</a></li>                 
-               </ul>
-             </div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
+                        <li><a data-toggle="pill" href="#menu1">Tipos de Munição</a></li>
+                        <li><a data-toggle="pill" href="#menu2">Munição</a></li>                 
+                    </ul>
+                </div>
 
              <div class="col-xs-9">
                <div class="tab-content" id="app">
-                 <div id="home" class="tab-pane fade in active">
-                   <h3>HOME</h3>
-                   <p>Em breve os dados dos Tipos de Munição e Munições... </p>
-                 </div>
+                    <div id="home" class="tab-pane fade in active">
+                        <h3>HOME</h3>
+                        <p>Em breve os dados dos Tipos de Munição e Munições... </p>
+                    </div>
 
                  <div id="menu1" class="tab-pane fade">
 
@@ -38,7 +38,7 @@
                         <tr>
                             <th scope="col">Código</th>
                             <th scope="col">Nome</th>
-                            <th scope="col">Data de Criação</th>                          
+                            <th scope="col">Data de Criação</th>                   
                             <th scope="col">Alterar</th>
                             <th scope="col">Remover</th>
                         </tr>                     
@@ -55,36 +55,35 @@
 
                     <form id="formulario">                        
                       <h3>Formulário para cadastrar Tipo de Munição</h3>
-                          <div class="form-group">
-                              <label for="inputCodigo">#:</label>
-                              <input type="text" v-model="novo_tipomunicao.codigo" class="form-control" id="inputCodigo" disabled>
-                          </div>
+                        <div class="form-group">
+                            <label for="inputCodigo">#:</label>
+                            <input type="text" v-model="novo_tipomunicao.codigo" class="form-control" id="inputCodigo" disabled>
+                        </div>
 
-                          <div class="form-group">
-                              <label for="inputNome">Nome:</label>
-                              <input type="text" v-model="novo_tipomunicao.nome" class="form-control" id="inputNome">
-                          </div>
-                        
-                          <div class="form-group">
+                        <div class="form-group">
+                            <label for="inputNome">Nome:</label>
+                            <input type="text" v-model="novo_tipomunicao.nome" class="form-control" id="inputNome">
+                        </div>
+                        <!--
+                        <div class="form-group">
                             <label for="inputDtCriacao">Data de Criação:</label>
                             <input type="date" v-model="novo_tipomunicao.datacriacao" class="form-control" id="inputDtCriacao" disabled>
-                          </div> 
-                          
-                          <button @click="addTipomunicao" class="btn btn-primary" type="button">Salvar</button>
-                          <button @click="cleanFormularioTipomunicao" class="btn btn-primary" type="button">Limpar</button>
-                        </div>                                                                            
+                        </div> 
+                        -->  
+                        <button @click="addTipomunicao" class="btn btn-primary" type="button">Salvar</button>
+                        <button @click="cleanFormularioTipomunicao" class="btn btn-primary" type="button">Limpar</button>
+                                                                                                   
                     </form>
+                </div>
 
-                 </div>
-                 
-                 <div id="menu2" class="tab-pane fade">
-                
+                <div id="menu2" class="tab-pane fade">
+            
                     <h2>Listagem de Munições</h2>   
 
                     <table class="table table-striped" >
                         <tr>
                             <th scope="col">Cod.Artefato</th>
-                            <th scope="col">Cod.TipoMunicao</th>
+                            <!--<th scope="col">Cod.TipoMunicao</th>-->
                             <th scope="col">Quant.Max.Compra</th>
                             <th scope="col">Calibre</th>
                             <th scope="col">Tipo de Munição</th>
@@ -94,7 +93,7 @@
                         <tbody>
                             <tr v-for="(m, indice) in municoes">                                                
                                     <td>{{m.codartefato}}</td>
-                                    <td>{{m.cod_tipomunicao}}</td>
+                                    <!--<td>{{m.cod_tipomunicao}}</td>-->
                                     <td>{{m.quant_max_compra}}</td>
                                     <td>{{m.calibre}}</td>
                                     <td>{{m.tipomunicao.nome}}</td>
@@ -110,12 +109,12 @@
                                 <label for="inputCodArtefato">Cod.Artefato:</label>
                                 <input type="text" v-model="nova_municao.codartefato" class="form-control" id="inputCodArtefato" disabled>
                             </div>
-
+<!--
                             <div class="form-group">
                                 <label for="inputCodTipomunicao">Cod.TipoMunição:</label>
                                 <input type="text" v-model="nova_municao.cod_tipomunicao" class="form-control" id="inputCodTipomunicao" disabled>
                             </div>
-
+-->
                             <div class="form-group">
                                 <label for="inputQuantmaxcompra">Quantidade Maxima para Compra:</label>
                                 <input type="number" v-model="nova_municao.quant_max_compra" class="form-control" id="inputQuantmaxcompra">
@@ -123,7 +122,17 @@
 
                             <div class="form-group">
                                 <label for="inputCalibre">Calibre:</label>
-                                <input type="number" v-model="nova_municao.calibre" class="form-control" id="inputCalibre">
+                                <input type="text" v-model="nova_municao.calibre" class="form-control" id="inputCalibre">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputNome">Nome do artefato:</label>
+                                <input type="text" v-model="nova_municao.nomeartefato" class="form-control" id="inputNome">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputValor">Valor do Artefato:</label>
+                                <input type="number" v-model="nova_municao.valor" class="form-control" id="inputValor">
                             </div>
 
                             <div class="form-group">
@@ -139,15 +148,13 @@
                             <button @click="addMunicao" class="btn btn-primary" type="button">Salvar</button>
                             <button @click="cleanFormularioMunicao" class="btn btn-primary" type="button">Limpar</button>                         
                                                                                                     
-                    </form>              
-
+                    </form> 
                 </div>
-
-               </div>
-             </div>
-           </div>
-         </div>
-    </body>
+            </div>
+          </div>
+        </div>
+      </div>
+ </body>
 
     <script type="text/javascript">
 
@@ -160,7 +167,9 @@
       var dados = {"municoes": municoes,
                   "nova_municao" : {indice: '',
                                     codartefato: '',
-                                    cod_tipomunicao: '',
+                                    //cod_tipomunicao: '',
+                                    nomeartefato: '',
+                                    valor: '',
                                     quant_max_compra: 0,
                                     calibre: '',
                                     tipomunicao: {codigo: 0, nome: '', datacriacao: ''}},
@@ -288,11 +297,11 @@
                     addMunicao: function () {
                         
                         var municao = jQuery.extend({}, this.nova_municao);//clona o this.nova_municao e armazena na variavel municao. dessa forma alteracoes em this.nova_municao nao irao refletir em municao.
-                        var nome = jQuery.extend({}, this.nova_municao.tipomunicao);//clona o this.nova_municao.nome
-                        municao.tipomunicao = nome;
+                        var tipo = jQuery.extend({}, this.nova_municao.tipomunicao);//clona o this.nova_municao.nome
+                        municao.tipomunicao = tipo;
 
 
-                        if (municao.codartefato > 0 && municao.quant_max_compra > 0 && municao.calibre > 0 && municao.tipomunicao.nome.length > 0) {
+                        if (municao.quant_max_compra > 0 && municao.calibre !='' && municao.tipomunicao.nome !='' && municao.valor > 0 && municao.nomeartefato != '') {
                             
                             //documentação sobre o parseInt
                             //https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/parseInt
@@ -308,7 +317,7 @@
 									})
 								.catch(error => { 
                                     console.log(error)
-									alert('Erro ao inserir a municao: '+error.response.codartefato);
+									alert('Erro ao inserir a municao: '+error.response);
 								});	
 
                             }else{
@@ -337,14 +346,15 @@
                     },
 
                     editMunicao: function (param_index) {
-
+                        
                         this.nova_municao.indice = param_index;
                         this.nova_municao.codartefato = this.municoes[param_index].codartefato;
-                        this.nova_municao.cod_tipomunicao = this.municoes[param_index].cod_tipomunicao;
+                        //this.nova_municao.cod_tipomunicao = this.municoes[param_index].cod_tipomunicao;
                         this.nova_municao.quant_max_compra = this.municoes[param_index].quant_max_compra;
                         this.nova_municao.calibre = this.municoes[param_index].calibre;
-                        this.nova_municao.tipomunicao = this.municoes[param_index].tipomunicao;
-                    
+                        this.nova_municao.tipomunicao = this.municoes[param_index].tipomunicao;                   
+                        this.nova_municao.nomeartefato = this.municoes[param_index].nomeartefato;
+                        this.nova_municao.valor = this.municoes[param_index].valor;
                     },
 
                     remMunicao: function(param_index){
@@ -381,9 +391,11 @@
 
                         this.nova_municao.indice = '';
                         this.nova_municao.codartefato = ''; 
-                        this.nova_municao.cod_tipomunicao = '';
+                        //this.nova_municao.cod_tipomunicao = '';
                         this.nova_municao.quant_max_compra = 0;
                         this.nova_municao.calibre = '';
+                        this.nova_municao.nomeartefato = '';
+                        this.nova_municao.valor = 0;
                         this.nova_municao.tipomunicao.codigo = '';
                         this.nova_municao.tipomunicao.nome = '';
                         this.nova_municao.tipomunicao.datacriacao = '';
@@ -414,18 +426,21 @@
                             console.log(response);
                         });
 
-/*
+
                     this.$http.get('http://localhost:4000/listmunicao')
                                     
                         .then(response => {
 
                             for(let m of response.data){
 
-                                this.tiposmunicao.push({codartefato: m.codartefato,
+                               
+                                this.municoes.push({codartefato: m.codartefato,
                                                         cod_tipomunicao: m.cod_tipomunicao,
                                                         quant_max_compra: m.quant_max_compra,
                                                         calibre: m.calibre,
-                                                        tipomunica:{codigo: m.codigo, 
+                                                        nomeartefato: m.nomeartefato,
+                                                        valor: m.valor,
+                                                        tipomunicao:{codigo: m.cod_tipomunicao, 
                                                                     nome: m.nome, 
                                                                     datacriacao: m.datacriacao},                             
                                                     }
@@ -436,9 +451,9 @@
                         }).catch(response => {
                             
                             alert('Não conectou no serviço: listmunicao');
-                            console.log(response);
+                            alert(response);
                         });
-*/
+
                     
                 }
 
